@@ -18,8 +18,6 @@
 		3865BD592A82B6AA003945CE /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3865BD582A82B6A9003945CE /* Recipe.swift */; };
 		38671DA32A8D230300C914B9 /* ModifyDirectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38671DA22A8D230300C914B9 /* ModifyDirectionView.swift */; };
 		387A91AD2A9FF2E3005CEA32 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3865BD512A82B54E003945CE /* Preview Assets.xcassets */; };
-		387A91B12A9FF4CE005CEA32 /* YsabeauSC-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 387A91B02A9FF4CE005CEA32 /* YsabeauSC-Thin.ttf */; };
-		387A91B32A9FF4E0005CEA32 /* YsabeauSC-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 387A91B22A9FF4E0005CEA32 /* YsabeauSC-Medium.ttf */; };
 		3891D85B2A913DD700854785 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3891D85A2A913DD700854785 /* SettingsView.swift */; };
 		38C41F382A84089F00D3B103 /* RecipeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C41F372A84089F00D3B103 /* RecipeData.swift */; };
 		38C41F3A2A840E0F00D3B103 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C41F392A840E0F00D3B103 /* RecipeDetailView.swift */; };
@@ -40,8 +38,6 @@
 		3865BD512A82B54E003945CE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3865BD582A82B6A9003945CE /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		38671DA22A8D230300C914B9 /* ModifyDirectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyDirectionView.swift; sourceTree = "<group>"; };
-		387A91B02A9FF4CE005CEA32 /* YsabeauSC-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "YsabeauSC-Thin.ttf"; path = "../../../../Fonts/static/YsabeauSC-Thin.ttf"; sourceTree = "<group>"; };
-		387A91B22A9FF4E0005CEA32 /* YsabeauSC-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "YsabeauSC-Medium.ttf"; path = "../../../../Fonts/static/YsabeauSC-Medium.ttf"; sourceTree = "<group>"; };
 		3891D85A2A913DD700854785 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		38BBBDC02A9E9712004646A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		38C41F372A84089F00D3B103 /* RecipeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeData.swift; sourceTree = "<group>"; };
@@ -102,7 +98,6 @@
 		3865BD492A82B54C003945CE /* Boozy */ = {
 			isa = PBXGroup;
 			children = (
-				387A91AF2A9FF49E005CEA32 /* Fonts */,
 				38BBBDC02A9E9712004646A6 /* Info.plist */,
 				38C41F362A83F1F500D3B103 /* ViewModels */,
 				38C41F352A83F1EA00D3B103 /* Views */,
@@ -120,15 +115,6 @@
 				3865BD512A82B54E003945CE /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		387A91AF2A9FF49E005CEA32 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				387A91B22A9FF4E0005CEA32 /* YsabeauSC-Medium.ttf */,
-				387A91B02A9FF4CE005CEA32 /* YsabeauSC-Thin.ttf */,
-			);
-			path = Fonts;
 			sourceTree = "<group>";
 		};
 		38C41F342A83F18800D3B103 /* Models */ = {
@@ -218,8 +204,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				387A91AD2A9FF2E3005CEA32 /* Preview Assets.xcassets in Resources */,
-				387A91B12A9FF4CE005CEA32 /* YsabeauSC-Thin.ttf in Resources */,
-				387A91B32A9FF4E0005CEA32 /* YsabeauSC-Medium.ttf in Resources */,
 				3865BD4F2A82B54E003945CE /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

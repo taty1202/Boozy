@@ -41,7 +41,7 @@ struct CategoryView: View {
                 .aspectRatio(contentMode: .fit)
                 .opacity(0.40)
             Text(category.rawValue)
-                .font(Font.custom("YsabeauSC-Thin", size: 32))
+                .font(.title)
                 .foregroundColor(.primary)
         }
     }

@@ -2,18 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Background color</key>
-	<string>LaunchBackgroundColor</string>
 	<key>UILaunchScreen</key>
 	<dict>
-		<key>UIColorName</key>
-		<string>LaunchScreenBackground</string>
-		<key>UIImageName</key>
-		<string>boozy</string>
-		<key>UIImageRespectsSafeAreaInsets</key>
-		<true/>
 		<key>UILaunchScreen</key>
-		<dict/>
+		<dict>
+			<key>Background color</key>
+			<string>LaunchScreenBackground</string>
+			<key>Image Name</key>
+			<string>boozy</string>
+		</dict>
 	</dict>
 </dict>
 </plist>

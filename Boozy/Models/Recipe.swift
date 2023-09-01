@@ -60,17 +60,17 @@ struct MainInformation: Codable {
 
 struct Ingredient: RecipeComponent {
     var name: String
-    var quantity: Double
+    var quantity: String
     var unit: Unit // ounces, grams, cups, teaspoons, tablespoons, None
 
     var description: String {
         let formattedQuantity = String(format: "%g", quantity)
         switch unit {
         case .none:
-            let formattedName = quantity == 1 ? name : "\(name)s"
+            let formattedName = quantity == "1" || quantity == "1/2" || quantity == "1/4" || quantity == "3/4" ? name : "\(name)s"
             return "\(formattedQuantity) \(formattedName)"
         default:
-            if quantity == 1 {
+            if quantity == "1" || quantity == "1/2" || quantity == "1/4" || quantity == "3/4" {
                 return "1 \(unit.singularName) \(name)"
             } else {
                 return "\(formattedQuantity) \(unit.rawValue) \(name)"
@@ -85,6 +85,7 @@ struct Ingredient: RecipeComponent {
         case tbs = "Tablespoons"
         case tsp = "Teaspoons"
         case dash = "Dashes"
+        case cube = "Cubes"
         case none = "No units"
 
         var singularName: String
@@ -93,13 +94,13 @@ struct Ingredient: RecipeComponent {
     
    
 
-    init(name:String, quantity:Double, unit: Unit) {
+    init(name:String, quantity:String, unit: Unit) {
         self.name = name
         self.quantity = quantity
         self.unit = unit
     }
     init() {
-        self.init(name: "", quantity: 1.0, unit: .none)
+        self.init(name: "", quantity: "", unit: .none)
     }
 }
 
@@ -123,9 +124,9 @@ extension Recipe {
                                                     description: "A whiskey take on the classic Negroni.",
                                                     category: .whiskey),
                    ingredients: [
-                    Ingredient(name: "Rye Whiskey or Bourbon", quantity: 1.0, unit: .oz),
-                    Ingredient(name: "Sweet Vermouth", quantity: 1.0, unit: .oz),
-                    Ingredient(name: "Campari", quantity: 1.0, unit: .oz),
+                    Ingredient(name: "Rye Whiskey or Bourbon", quantity: "1", unit: .oz),
+                    Ingredient(name: "Sweet Vermouth", quantity:" 1", unit: .oz),
+                    Ingredient(name: "Campari", quantity: "1", unit: .oz),
                    ],
                    directions:  [
                     Direction(description: "Combine ingredients in a mixing glass with ice", isOptional: false),
@@ -136,10 +137,10 @@ extension Recipe {
                                                     description: "A warm and comforting mix of coffee, Irish whiskey, sugar, and cream.",
                                                     category: .whiskey),
                    ingredients: [
-                    Ingredient(name: "Irish Whiskey", quantity: 1.5, unit: .oz),
-                    Ingredient(name: "Brown Sugar", quantity: 1.0, unit: .tsp),
-                    Ingredient(name: "Hot Coffee", quantity: 4.0, unit: .oz),
-                    Ingredient(name: "Heavy Cream (lightly whipped)", quantity: 0.0, unit: .none)
+                    Ingredient(name: "Irish Whiskey", quantity: "1 1/2", unit: .oz),
+                    Ingredient(name: "Brown Sugar", quantity: "1", unit: .tsp),
+                    Ingredient(name: "Hot Coffee", quantity: "4", unit: .oz),
+                    Ingredient(name: "Heavy Cream (lightly whipped)", quantity: "", unit: .none)
                    ],
                    directions:  [
                     Direction(description: "Combine whiskey, brown sugar, and coffee in a mug and stir until sugar is dissolved", isOptional: false),
@@ -152,10 +153,10 @@ extension Recipe {
                                                 description: "A distinguished whiskey cocktail with vermouth and bitters.",
                                                 category: .whiskey),
                ingredients: [
-                Ingredient(name: "Rye Whiskey", quantity: 2, unit: .oz),
-                Ingredient(name: "Sweet Vermouth", quantity: 0.75, unit: .oz),
-                Ingredient(name: "Angostura Bitters", quantity: 2.0, unit: .dash),
-                Ingredient(name: "Cherry", quantity: 1, unit: .none),
+                Ingredient(name: "Rye Whiskey", quantity: "2", unit: .oz),
+                Ingredient(name: "Sweet Vermouth", quantity: "3/4", unit: .oz),
+                Ingredient(name: "Angostura Bitters", quantity: "2", unit: .dash),
+                Ingredient(name: "Cherry", quantity: "1", unit: .none),
                ],
                directions:  [
                 Direction(description: "Stir ingredients together with ice for about 30 seconds", isOptional: false),
@@ -167,9 +168,9 @@ extension Recipe {
                                                 description: "A Southern classic known for its association with the Kentucky Derby.",
                                                 category: .whiskey),
                ingredients: [
-                Ingredient(name: "Bourbon", quantity: 2.5, unit: .oz),
-                Ingredient(name: "Fresh Mint Leaves", quantity: 6.0, unit: .none),
-                Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .oz)
+                Ingredient(name: "Bourbon", quantity: "2 1/2", unit: .oz),
+                Ingredient(name: "Fresh Mint Leaves", quantity: "6-8", unit: .none),
+                Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz)
                ],
                directions:  [
                 Direction(description: "Muddle the mint leaves and simple syrup in a glass", isOptional: false),
@@ -182,11 +183,11 @@ extension Recipe {
                                             description: "A classic cocktail featuring the rich flavors of whiskey and bitters.",
                                             category: .whiskey),
            ingredients: [
-            Ingredient(name: "Whiskey", quantity: 1.5, unit: .oz),
-            Ingredient(name: "Angostura Bitters", quantity: 2, unit: .dash),
-            Ingredient(name: "Sugar", quantity: 1, unit: .tsp),
-            Ingredient(name: "Cherry", quantity: 1, unit: .none),
-            Ingredient(name: "Orange Twist", quantity: 1, unit: .none),
+            Ingredient(name: "Whiskey", quantity: "1 1/2", unit: .oz),
+            Ingredient(name: "Angostura Bitters", quantity: "2", unit: .dash),
+            Ingredient(name: "Sugar", quantity: "1", unit: .cube),
+            Ingredient(name: "Cherry", quantity: "", unit: .none),
+            Ingredient(name: "Orange Twist", quantity: "", unit: .none),
            ],
            directions:  [
             Direction(description: "Place sugar cube in glass and saturate with bitters, add a dash of plain water", isOptional: false),
@@ -198,10 +199,10 @@ extension Recipe {
                                                     description: "Similar to the Manhattan but specifically uses Scotch whiskey.",
                                                     category: .whiskey),
                    ingredients: [
-                    Ingredient(name: "Scotch Whiskey", quantity: 2.0, unit: .oz),
-                    Ingredient(name: "Sweet Vermouth", quantity: 0.75, unit: .oz),
-                    Ingredient(name: "Angostura Bitters", quantity: 2.0, unit: .dash),
-                    Ingredient(name: "Cherry or Lemon Twist (garnish)", quantity: 1.0, unit: .none)
+                    Ingredient(name: "Scotch Whiskey", quantity: "2", unit: .oz),
+                    Ingredient(name: "Sweet Vermouth", quantity: "3/4", unit: .oz),
+                    Ingredient(name: "Angostura Bitters", quantity: "2", unit: .dash),
+                    Ingredient(name: "Cherry or Lemon Twist (garnish)", quantity: "", unit: .none)
                    ],
                    directions:  [
                     Direction(description: "Combine ingredients in a mixing glass with ice", isOptional: false),
@@ -213,11 +214,11 @@ extension Recipe {
                                                     description: "A New Orleans classic known for its combination of rye, absinthe, and bitters.",
                                                     category: .whiskey),
                    ingredients: [
-                    Ingredient(name: "Rye Whiskey", quantity: 2.0, unit: .oz),
-                    Ingredient(name: "Sugar Cube", quantity: 1.0, unit: .none),
-                    Ingredient(name: "Angostura Bitters", quantity: 1.0, unit: .dash),
-                    Ingredient(name: "Absinthe (for rinsing)", quantity: 0.0, unit: .none),
-                    Ingredient(name: "Lemon Twist", quantity: 1.0, unit: .none)
+                    Ingredient(name: "Rye Whiskey", quantity: "2", unit: .oz),
+                    Ingredient(name: "Sugar Cube", quantity: "1", unit: .none),
+                    Ingredient(name: "Angostura Bitters", quantity: "1", unit: .dash),
+                    Ingredient(name: "Absinthe (for rinsing)", quantity: "", unit: .none),
+                    Ingredient(name: "Lemon Twist", quantity: "", unit: .none)
                    ],
                    directions:  [
                     Direction(description: "Muddle the sugar and bitters with one dash of water in a glass", isOptional: false),
@@ -231,10 +232,10 @@ extension Recipe {
                                                     description: "A refreshing blend of whiskey, citrus, and sweetness.",
                                                     category: .whiskey),
                    ingredients: [
-                    Ingredient(name: "Whiskey", quantity: 2.0, unit: .oz),
-                    Ingredient(name: "Lemon Juice", quantity: 0.75, unit: .oz),
-                    Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .oz),
-                    Ingredient(name: "Cherry and Lemon Slice (garnish)", quantity: 1.0, unit: .none)
+                    Ingredient(name: "Whiskey", quantity: "2", unit: .oz),
+                    Ingredient(name: "Lemon Juice", quantity: "3/4", unit: .oz),
+                    Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz),
+                    Ingredient(name: "Cherry and Lemon Slice (garnish)", quantity: "", unit: .none)
                    ],
                    directions:  [
                     Direction(description: "Combine whiskey, lemon juice, and simple syrup in a shaker with ice", isOptional: false),
@@ -248,11 +249,11 @@ extension Recipe {
                                             description: "A classic cocktail with a pale sky-blue hue, known for its unique blend of gin, maraschino, and violette.",
                                             category: .gin),
            ingredients: [
-            Ingredient(name: "Gin", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lemon Juice", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Maraschino Liqueur", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Crème de Violette", quantity: 0.75, unit: .tsp),
-            Ingredient(name: "Cherry", quantity: 1.0, unit: .none)
+            Ingredient(name: "Gin", quantity: "2", unit: .oz),
+            Ingredient(name: "Lemon Juice", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Maraschino Liqueur", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Crème de Violette", quantity: "3/4", unit: .tsp),
+            Ingredient(name: "Cherry (garnish)", quantity: "1", unit: .none)
            ],
            directions:  [
             Direction(description: "Shake all ingredients with ice then strain into a coupe.", isOptional: false),
@@ -263,16 +264,16 @@ extension Recipe {
                                             description: "A berry-licious gin cocktail with a hint of citrus.",
                                             category: .gin),
            ingredients: [
-            Ingredient(name: "Gin", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Fresh Lemon Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Blackberry Liqueur (Chambord)", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Fresh blackberries (garnish)", quantity: 3.0, unit: .none)
+            Ingredient(name: "Gin", quantity: "2", unit: .oz),
+            Ingredient(name: "Fresh Lemon Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Blackberry Liqueur (Chambord)", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Fresh blackberries (garnish)", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Combine gin, lemon juice, and simple syrup in a shaker with ice", isOptional: false),
             Direction(description: "Shake well", isOptional: false),
-            Direction(description: "Strain into a rocks glass filled with crushed ic", isOptional: false),
+            Direction(description: "Strain into a glass filled with crushed ice", isOptional: false),
             Direction(description: "Drizzle blackberry liqueur over the top", isOptional: false),
             Direction(description: " Garnish with fresh blackberries", isOptional: true)
            ]
@@ -281,9 +282,9 @@ extension Recipe {
                                             description: "A Prohibition-era cocktail blending gin, honey, and lemon.",
                                             category: .gin),
            ingredients: [
-            Ingredient(name: "Gin", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Fresh Lemon Juice", quantity: 0.75, unit: .oz),
-            Ingredient(name: "Honey Syrup", quantity: 0.5, unit: .oz)
+            Ingredient(name: "Gin", quantity: "2", unit: .oz),
+            Ingredient(name: "Fresh Lemon Juice", quantity: "3/4", unit: .oz),
+            Ingredient(name: "Honey Syrup", quantity: "1/2", unit: .oz)
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker with ice", isOptional: false),
@@ -295,10 +296,10 @@ extension Recipe {
                                             description: "A pre-Prohibition classic, known for its frothy texture and pink hue.",
                                             category: .gin),
            ingredients: [
-            Ingredient(name: "Gin", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Fresh Lemon Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Raspberry Syrup or grenadine", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Egg White", quantity: 1.0, unit: .none)
+            Ingredient(name: "Gin", quantity: "2", unit: .oz),
+            Ingredient(name: "Fresh Lemon Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Raspberry Syrup or grenadine", quantity: "1", unit: .oz),
+            Ingredient(name: "Egg White", quantity: "1", unit: .none)
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker without ice and shake vigorously (this is called a 'dry shake' and helps to froth the egg white)", isOptional: false),
@@ -310,10 +311,10 @@ extension Recipe {
                                             description: "A fizzy cocktail with a mix of gin, lemon, and champagne.",
                                             category: .gin),
     ingredients: [
-        Ingredient(name: "Gin", quantity: 2.0, unit: .oz),
-        Ingredient(name: "Fresh Lemon Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Champagne or Sparkling wine", quantity: 3.0, unit: .oz),
-        Ingredient(name: "Lemon Twist", quantity: 1.0, unit: .none)
+        Ingredient(name: "Gin", quantity: "2", unit: .oz),
+        Ingredient(name: "Fresh Lemon Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Champagne or Sparkling wine", quantity: "", unit: .none),
+        Ingredient(name: "Lemon Twist", quantity: "", unit: .none)
     ],
     directions: [
         Direction(description: "Combine gin, lemon juice, and simple syrup in a shaker with ice", isOptional: false),
@@ -327,9 +328,9 @@ extension Recipe {
                                             description: "A simple combination of gin and lime.",
                                             category: .gin),
            ingredients: [
-            Ingredient(name: "Gin", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .none)
+            Ingredient(name: "Gin", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz)
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker with ice", isOptional: false),
@@ -341,9 +342,9 @@ extension Recipe {
                                             description: "A timeless, refreshing drink known for its simplicity.",
                                             category: .gin),
            ingredients: [
-            Ingredient(name: "Gin", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Tonic Water", quantity: 4.0, unit: .oz),
-            Ingredient(name: "Lime or Lemon Wedge", quantity: 1.0, unit: .none)
+            Ingredient(name: "Gin", quantity: "2", unit: .oz),
+            Ingredient(name: "Tonic Water", quantity: "", unit: .none),
+            Ingredient(name: "Lime or Lemon Wedge", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Fill a glass with ice.", isOptional: false),
@@ -356,10 +357,10 @@ extension Recipe {
                                             description: "An elegant cocktail known for its simplicity and sophistication.",
                                             category: .gin),
            ingredients: [
-            Ingredient(name: "Gin", quantity: 2.5, unit: .oz),
-            Ingredient(name: "Dry Vermouth", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Lemon Twist (for garnish)", quantity: 1, unit: .none),
-            Ingredient(name: "Olive (for garnish)", quantity: 2, unit: .none)
+            Ingredient(name: "Gin", quantity: "2", unit: .oz),
+            Ingredient(name: "Dry Vermouth", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Lemon Twist (garnish)", quantity: "", unit: .none),
+            Ingredient(name: "Olives (garnish)", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Pour gin and vermouth into a glass over ice.", isOptional: false),
@@ -371,11 +372,11 @@ extension Recipe {
                                             description: "A balanced mix of gin, vermouth, and Campari.",
                                             category: .gin),
            ingredients: [
-            Ingredient(name: "Campari", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Sweet Vermouth", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Gin", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Orange", quantity: 1.0, unit: .none),
-            Ingredient(name: "Grapefruit", quantity: 1.0, unit: .none)
+            Ingredient(name: "Campari", quantity: "1", unit: .oz),
+            Ingredient(name: "Sweet Vermouth", quantity: "1", unit: .oz),
+            Ingredient(name: "Gin", quantity: "1", unit: .oz),
+            Ingredient(name: "Orange", quantity: "", unit: .none),
+            Ingredient(name: "Grapefruit", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Combine all ingredients over a big ice rock in a glass", isOptional: false),
@@ -387,11 +388,11 @@ extension Recipe {
                                             description: "A refreshing lemony gin cocktail with soda.",
                                             category: .gin),
            ingredients: [
-            Ingredient(name: "Gin", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lemon Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Soda Water", quantity: 4.0, unit: .oz),
-            Ingredient(name: "Lemon Slice and Cherry (garnish)", quantity: 1.0, unit: .none)
+            Ingredient(name: "Gin", quantity: "2", unit: .oz),
+            Ingredient(name: "Lemon Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Soda Water", quantity: "", unit: .none),
+            Ingredient(name: "Lemon Slice and Cherry (garnish)", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Combine gin, lemon juice, and simple syrup in a shaker with ice.", isOptional: false),
@@ -406,9 +407,9 @@ extension Recipe {
                                             description: "A bubbly cocktail that combines tequila with sparkling wine.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Tequila", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Champagne or Sparkling Wine", quantity: 4.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 0.5, unit: .oz),
+            Ingredient(name: "Tequila", quantity: "1", unit: .oz),
+            Ingredient(name: "Champagne or Sparkling Wine", quantity: "", unit: .none),
+            Ingredient(name: "Lime Juice", quantity: "1/2", unit: .oz),
         
            ],
            directions:  [
@@ -420,10 +421,10 @@ extension Recipe {
                                             description: "A spicy mix of tequila, ginger, and blackcurrant flavors.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Tequila", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Crème de cassis", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Ginger Beer", quantity: 3.0, unit: .oz),
+            Ingredient(name: "Tequila", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Crème de cassis", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Ginger Beer", quantity: "", unit: .none),
         
            ],
            directions:  [
@@ -436,10 +437,10 @@ extension Recipe {
                                             description: "A balanced mix of smokiness, sweetness, and tartness.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Mezcal", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 0.75, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Maraschino Liqueur", quantity: 0.5, unit: .oz)
+            Ingredient(name: "Mezcal", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "3/4", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Maraschino Liqueur", quantity: "1/2", unit: .oz)
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker with ice", isOptional: false),
@@ -450,11 +451,11 @@ extension Recipe {
                                             description: "A tequila take on the classic Tom Collins.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Tequila", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Soda Water", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lemon Wedge and Cherry (garnish)", quantity: 1.0, unit: .none),
+            Ingredient(name: "Tequila", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Soda Water", quantity: "", unit: .none),
+            Ingredient(name: "Lemon Wedge and Cherry (garnish)", quantity: "", unit: .none),
         
            ],
            directions:  [
@@ -468,10 +469,10 @@ extension Recipe {
                                             description: "A delightful concoction with raspberry and mezcal.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Mezcal", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Raspberry Liqueur", quantity: 0.75, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.25, unit: .oz)
+            Ingredient(name: "Mezcal", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Raspberry Liqueur", quantity: "3/4", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/4", unit: .oz)
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker with ice", isOptional: false),
@@ -482,11 +483,11 @@ extension Recipe {
                                             description: "The iconic tequila cocktail with a perfect balance of sweet, sour, salty, and bitter.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Tequila", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Cointreau", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Lime Jiuce", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Salt (for rimming the glass)", quantity: 0.0, unit: .none),
-            Ingredient(name: "Lime", quantity: 1, unit: .none)
+            Ingredient(name: "Tequila", quantity: "2", unit: .oz),
+            Ingredient(name: "Cointreau", quantity: "1", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Salt (for rimming the glass)", quantity: "", unit: .none),
+            Ingredient(name: "Lime", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: " Rim a glass with salt", isOptional: true),
@@ -499,9 +500,9 @@ extension Recipe {
                                             description: "A fruity blend of tequila, pineapple, and lime.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Tequila", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Pineapple Juice", quantity: 3.0, unit: .oz),
+            Ingredient(name: "Tequila", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Pineapple Juice", quantity: "3", unit: .oz),
         
            ],
            directions:  [
@@ -513,11 +514,11 @@ extension Recipe {
                                             description: "A smoky twist on the classic margarita.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Mezcal", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Cointreau", quantity: 0.75, unit: .oz),
-            Ingredient(name: "Lime Jiuce", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .none),
-            Ingredient(name: "Salt (for rimming the glass)", quantity: 0.0, unit: .none)
+            Ingredient(name: "Mezcal", quantity: "2", unit: .oz),
+            Ingredient(name: "Cointreau", quantity: "3/4", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Salt (for rimming the glass)", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: " Rim a glass with salt", isOptional: true),
@@ -530,10 +531,10 @@ extension Recipe {
                                             description: "A smoky variant of the refreshing grapefruit-based Paloma.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Mezcal", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Grapefruit Soda", quantity: 4.0, unit: .oz),
-            Ingredient(name: "Lime Jiuce", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Salt (for rimming the glass)", quantity: 0.0, unit: .none)
+            Ingredient(name: "Mezcal", quantity: "2", unit: .oz),
+            Ingredient(name: "Grapefruit Soda", quantity: "", unit: .none),
+            Ingredient(name: "Lime Juice", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Salt (for rimming the glass)", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: " Rim a glass with salt", isOptional: true),
@@ -543,13 +544,13 @@ extension Recipe {
            ]
     ),
     Recipe(mainInformation: MainInformation(name: "Naked and Famous",
-                                            description: " A delightful mix of mezcal, chartreuse, and Aperol.",
+                                            description: "A delightful mix of mezcal, chartreuse, and Aperol.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Mezcal", quantity: 0.75, unit: .oz),
-            Ingredient(name: "Yellow Chartreuse", quantity: 0.75, unit: .oz),
-            Ingredient(name: "Aperol", quantity: 0.75, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 0.75, unit: .oz)
+            Ingredient(name: "Mezcal", quantity: "3/4", unit: .oz),
+            Ingredient(name: "Yellow Chartreuse", quantity: "3/4", unit: .oz),
+            Ingredient(name: "Aperol", quantity: "3/4", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "3/4", unit: .oz)
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker with ice", isOptional: false),
@@ -560,11 +561,11 @@ extension Recipe {
                                             description: "A blend of mezcal and tequila in a twist on the Old Fashioned.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Mezcal", quantity: 1.5, unit: .oz),
-            Ingredient(name: "Tequila", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Agave Nectar", quantity: 1.0, unit: .tsp),
-            Ingredient(name: "dashes Angostura Bitters", quantity: 2.0, unit: .none),
-            Ingredient(name: "Orange Peel (garnish)", quantity: 1.0, unit: .none)
+            Ingredient(name: "Mezcal", quantity: "1 1/2", unit: .oz),
+            Ingredient(name: "Tequila", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Agave Nectar", quantity: "1", unit: .tsp),
+            Ingredient(name: "Angostura Bitters", quantity: "2", unit: .dash),
+            Ingredient(name: "Orange Peel (garnish)", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Combine all ingredients (except garnish) in a mixing glass with ice", isOptional: false),
@@ -576,10 +577,10 @@ extension Recipe {
                                             description: "A refreshing grapefruit and tequila cocktail.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Tequila", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Grapefruit Soda", quantity: 3.0, unit: .oz),
-            Ingredient(name: "Salt (optional for rimming the glass)", quantity: 0.0, unit: .none),
+            Ingredient(name: "Tequila", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Grapefruit Soda", quantity: "", unit: .none),
+            Ingredient(name: "Salt (for rimming the glass)", quantity: "", unit: .none),
         
            ],
            directions:  [
@@ -593,10 +594,10 @@ extension Recipe {
                                             description: "A variation of the Moscow Mule with a mezcal kick.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Mezcal", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Ginger Beer", quantity: 0.0, unit: .none),
-            Ingredient(name: "Lime Wedge (garnish)", quantity: 1.0, unit: .none)
+            Ingredient(name: "Mezcal", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Ginger Beer", quantity: "", unit: .none),
+            Ingredient(name: "Lime Wedge (garnish)", quantity: "1", unit: .none)
             
            ],
            directions:  [
@@ -610,10 +611,10 @@ extension Recipe {
                                             description: "A cleverly named cocktail with a spicy kick.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Tequila", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Green Crème de Menthe", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Tabasco", quantity: 1.0, unit: .dash)
+            Ingredient(name: "Tequila", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Green Crème de Menthe", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Tabasco", quantity: "1", unit: .dash)
         
            ],
            directions:  [
@@ -625,11 +626,11 @@ extension Recipe {
                                             description: "A visually stunning drink that mimics the colors of a sunrise.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Tequila", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Orange Juice", quantity: 4.0, unit: .oz),
-            Ingredient(name: "Grenadine", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Cherry", quantity: 1.0, unit: .none),
-            Ingredient(name: "Orange", quantity: 1.0, unit: .none)
+            Ingredient(name: "Tequila", quantity: "2", unit: .oz),
+            Ingredient(name: "Orange Juice", quantity: "4", unit: .oz),
+            Ingredient(name: "Grenadine", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Cherry", quantity: "", unit: .none),
+            Ingredient(name: "Orange", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Pour tequila and orange juice into a glass with ice.", isOptional: false),
@@ -642,9 +643,9 @@ extension Recipe {
                                             description: "A classic tequila cocktail with apricot and lime.",
                                             category: .tequila),
            ingredients: [
-            Ingredient(name: "Tequila", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Apricot Brandy", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
+            Ingredient(name: "Tequila", quantity: "2", unit: .oz),
+            Ingredient(name: "Apricot Brandy", quantity: "1", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
         
            ],
            directions:  [
@@ -658,10 +659,10 @@ extension Recipe {
                                             description: "A vibrant blue cocktail with a citrusy flavor.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 1.5, unit: .oz),
-            Ingredient(name: "Blue Curaçao", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Lemonade", quantity: 3.0, unit: .oz),
-            Ingredient(name: "Cherry and Lemon Twist", quantity: 1.0, unit: .none),
+            Ingredient(name: "Vodka", quantity: "1 1/2", unit: .oz),
+            Ingredient(name: "Blue Curaçao", quantity: "1", unit: .oz),
+            Ingredient(name: "Lemonade", quantity: "", unit: .none),
+            Ingredient(name: "Cherry and Lemon Twist", quantity: "", unit: .none),
            ],
            directions:  [
             Direction(description: "Fill a glass with ice", isOptional: false),
@@ -674,15 +675,15 @@ extension Recipe {
                                             description: "A popular fruity cocktail with a vibrant pink hue.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 1.3, unit: .oz),
-            Ingredient(name: "Triple Sec", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Cranberry Juice", quantity: 1, unit: .oz),
-            Ingredient(name: "Lemon", quantity: 1, unit: .none)
+            Ingredient(name: "Vodka", quantity: "1 1/2", unit: .oz),
+            Ingredient(name: "Triple Sec", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Cranberry Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Lemon", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Add all ingredients into a cocktail shaker filled with ice.", isOptional: false),
-            Direction(description: "Shake well and double strain into large cocktail glass.", isOptional: false),
+            Direction(description: "Shake well and strain into large cocktail glass.", isOptional: false),
             Direction(description: " Garnish with a lime wheel", isOptional: true)
            ]
     ),
@@ -690,10 +691,10 @@ extension Recipe {
                                             description: "A cocktail that combines the rich flavors of coffee with the kick of vodka.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 1.5, unit: .oz),
-            Ingredient(name: "Kahlúa", quantity: 1, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.33, unit: .oz),
-            Ingredient(name: "Espresso Shot", quantity: 1, unit: .none),
+            Ingredient(name: "Vodka", quantity: "1 1/2", unit: .oz),
+            Ingredient(name: "Kahlúa", quantity: "1", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/3", unit: .oz),
+            Ingredient(name: "Espresso Shot", quantity: "1", unit: .none),
            ],
            directions:  [
             Direction(description: "Pour ingredients into shaker filled with ice.", isOptional: false),
@@ -705,9 +706,9 @@ extension Recipe {
                                             description: "A simple and fruity cocktail.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Peach Schnapps", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Orange Juice", quantity: 4.0, unit: .oz),
+            Ingredient(name: "Vodka", quantity: "2", unit: .oz),
+            Ingredient(name: "Peach Schnapps", quantity: "2", unit: .oz),
+            Ingredient(name: "Orange Juice", quantity: "4", unit: .oz),
            ],
            directions:  [
             Direction(description: "Combine vodka, peach schnapps and orange juice in a glass filled with ice", isOptional: false),
@@ -718,9 +719,9 @@ extension Recipe {
                                             description: "A strong and zesty cocktail.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Triple Sec", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Fresh Lemon Juice", quantity: 1.0, unit: .oz)
+            Ingredient(name: "Vodka", quantity: "1", unit: .oz),
+            Ingredient(name: "Triple Sec", quantity: "1", unit: .oz),
+            Ingredient(name: "Fresh Lemon Juice", quantity: "1", unit: .oz)
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker with ice", isOptional: false),
@@ -732,11 +733,11 @@ extension Recipe {
                                             description: "A sweet and sour cocktail with a citrusy punch.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 1.5, unit: .oz),
-            Ingredient(name: "Triple Sec", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Fresh Lemon Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.25, unit: .oz),
-            Ingredient(name: "Sugar Rim (Optional)", quantity: 0.0, unit: .none),
+            Ingredient(name: "Vodka", quantity: "1 1/2", unit: .oz),
+            Ingredient(name: "Triple Sec", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Fresh Lemon Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/4", unit: .oz),
+            Ingredient(name: "Sugar Rim (for rimming the glass)", quantity: "", unit: .none),
            ],
            directions:  [
             Direction(description: " Rim a glass with sugar", isOptional: true),
@@ -749,9 +750,9 @@ extension Recipe {
                                             description: "A fruity highball drink.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 1.5, unit: .oz),
-            Ingredient(name: "Cranberry Juice", quantity: 3.0, unit: .oz),
-            Ingredient(name: "Orange Juice", quantity: 1.0, unit: .oz)
+            Ingredient(name: "Vodka", quantity: "1 1/2", unit: .oz),
+            Ingredient(name: "Cranberry Juice", quantity: "3", unit: .oz),
+            Ingredient(name: "Orange Juice", quantity: "1", unit: .oz)
            ],
            directions:  [
             Direction(description: "Fill a glass with ice", isOptional: false),
@@ -763,25 +764,25 @@ extension Recipe {
                                             description: "An elegant cocktail known for its simplicity and sophistication.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 2.5, unit: .oz),
-            Ingredient(name: "Extra Dry Vermouth", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Lemon Twist (for garnish)", quantity: 1, unit: .none),
-            Ingredient(name: "Olive (for garnish)", quantity: 2, unit: .none)
+            Ingredient(name: "Vodka", quantity: "2 1/2", unit: .oz),
+            Ingredient(name: "Extra Dry Vermouth", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Lemon Twist (garnish)", quantity: "", unit: .none),
+            Ingredient(name: "Olives (garnish)", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Pour vodka and vermouth into a glass over ice.", isOptional: false),
             Direction(description: "Stir ingredients with ice and strain into a chilled glass", isOptional: false),
-            Direction(description: " Garnish with an lemon twist or olive", isOptional: true)
+            Direction(description: " Garnish with an lemon twist or olives", isOptional: true)
            ]
     ),
     Recipe(mainInformation: MainInformation(name: "Moscow Mule",
                                             description: "A refreshing cocktail with a spicy ginger kick.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Ginger Beer", quantity: 6.0, unit: .oz),
-            Ingredient(name: "Fresh Lemon Juice", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Lime Wedge", quantity: 1.0, unit: .none),
+            Ingredient(name: "Vodka", quantity: "2", unit: .oz),
+            Ingredient(name: "Ginger Beer", quantity: "", unit: .none),
+            Ingredient(name: "Fresh Lemon Juice", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Lime Wedge", quantity: "", unit: .none),
             
            ],
            directions:  [
@@ -795,10 +796,10 @@ extension Recipe {
                                             description: "A creamy and chocolatey dessert cocktail.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Kahlúa", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Baileys Irish Cream", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Heavy Cream or Milk", quantity: 1.0, unit: .oz)
+            Ingredient(name: "Vodka", quantity: "1", unit: .oz),
+            Ingredient(name: "Kahlúa", quantity: "1", unit: .oz),
+            Ingredient(name: "Baileys Irish Cream", quantity: "1", unit: .oz),
+            Ingredient(name: "Heavy Cream or Milk", quantity: "1", unit: .oz)
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker with ice.", isOptional: false),
@@ -810,8 +811,8 @@ extension Recipe {
                                             description: "A simple mix of vodka and orange juice.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Orange Juice", quantity: 6.0, unit: .oz)
+            Ingredient(name: "Vodka", quantity: "2", unit: .oz),
+            Ingredient(name: "Orange Juice", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Fill a glass with ice.", isOptional: false),
@@ -823,10 +824,10 @@ extension Recipe {
                                             description: "A refreshing cocktail with fruit juices.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 1.5, unit: .oz),
-            Ingredient(name: "Cranberry Juice", quantity: 3.0, unit: .oz),
-            Ingredient(name: "Grapefruit Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Lime Wedge (garnish)", quantity: 1.0, unit: .none),
+            Ingredient(name: "Vodka", quantity: "1 1/2", unit: .oz),
+            Ingredient(name: "Cranberry Juice", quantity: "3", unit: .oz),
+            Ingredient(name: "Grapefruit Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Lime Wedge (garnish)", quantity: "", unit: .none),
            ],
            directions:  [
             Direction(description: "Fill a glass with ice", isOptional: false),
@@ -838,11 +839,11 @@ extension Recipe {
                                             description: "A fruity cocktail with a memorable name.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 1.5, unit: .oz),
-            Ingredient(name: "Peach Schnapps", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Cranberry Juice", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Orange Juice", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Orange Slice and Maraschino Cherry (garnish)", quantity: 1.0, unit: .none),
+            Ingredient(name: "Vodka", quantity: "1 1/2", unit: .oz),
+            Ingredient(name: "Peach Schnapps", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Cranberry Juice", quantity: "2", unit: .oz),
+            Ingredient(name: "Orange Juice", quantity: "2", unit: .oz),
+            Ingredient(name: "Orange Slice and Maraschino Cherry (garnish)", quantity: "", unit: .none),
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker with ice", isOptional: false),
@@ -855,12 +856,12 @@ extension Recipe {
                                             description: "A vodka version of the classic Tom Collins.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lemon Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Soda Water", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lemon wedge (garnish)", quantity: 1.0, unit: .none),
-            Ingredient(name: "Cherry (garnish)", quantity: 1.0, unit: .none)
+            Ingredient(name: "Vodka", quantity: "2", unit: .oz),
+            Ingredient(name: "Lemon Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Soda Water", quantity: "", unit: .none),
+            Ingredient(name: "Lemon wedge (garnish)", quantity: "", unit: .none),
+            Ingredient(name: "Cherry (garnish)", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Combine vodka, lemon juice, and simple syrup in a glass filled with ice.", isOptional: false),
@@ -872,9 +873,9 @@ extension Recipe {
                                             description: "A classic cocktail with a clear, crisp flavor.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.5, unit: .oz)
+            Ingredient(name: "Vodka", quantity: "2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/2", unit: .oz)
            ],
            directions:  [
             Direction(description: "Combine all ingredients in a shaker with ice.", isOptional: false),
@@ -886,9 +887,9 @@ extension Recipe {
                                             description: "A clear and crisp highball drink.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Tonic water", quantity: 4.0, unit: .oz),
-            Ingredient(name: "Lime wedge (garnish)", quantity: 1.0, unit: .none),
+            Ingredient(name: "Vodka", quantity: "2", unit: .oz),
+            Ingredient(name: "Tonic water", quantity: "", unit: .none),
+            Ingredient(name: "Lime wedge (garnish)", quantity: "", unit: .none),
            ],
            directions:  [
             Direction(description: "Fill a glass with ice", isOptional: false),
@@ -901,9 +902,9 @@ extension Recipe {
                                             description: "A creamy cocktail with the flavor combination of coffee and cream.",
                                             category: .vodka),
            ingredients: [
-            Ingredient(name: "Vodka", quantity: 2.0, unit: .oz),
-            Ingredient(name: "Kahlúa or other coffee liqueur", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Heavy Cream", quantity: 1.0, unit: .oz),
+            Ingredient(name: "Vodka", quantity: "2", unit: .oz),
+            Ingredient(name: "Kahlúa or other coffee liqueur", quantity: "1", unit: .oz),
+            Ingredient(name: "Heavy Cream", quantity: "", unit: .none),
            ],
            directions:  [
             Direction(description: "Fill a glass with ice.", isOptional: false),
@@ -917,9 +918,9 @@ extension Recipe {
                                             description: "Essentially a rum and coke with a twist of lime.",
                                             category: .rum),
     ingredients: [
-        Ingredient(name: "White Rum", quantity: 2.0, unit: .oz),
-        Ingredient(name: "Cola", quantity: 4.0, unit: .oz),
-        Ingredient(name: "Lime", quantity: 0.5, unit: .none)
+        Ingredient(name: "White Rum", quantity: "2", unit: .oz),
+        Ingredient(name: "Cola", quantity: "", unit: .none),
+        Ingredient(name: "Lime", quantity: "1/2", unit: .none)
     ],
     directions: [
         Direction(description: "Fill glass with ice.", isOptional: false),
@@ -932,9 +933,9 @@ extension Recipe {
                                             description: "A simple and classic cocktail combining rum, lime, and sugar.",
                                             category: .rum),
     ingredients: [
-        Ingredient(name: "Rum", quantity: 2.0, unit: .oz),
-        Ingredient(name: "Fresh lime juice", quantity: 1, unit: .oz),
-        Ingredient(name: "Simple Syrup", quantity: 0.75, unit: .oz)
+        Ingredient(name: "Rum", quantity: "2", unit: .oz),
+        Ingredient(name: "Fresh lime juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Simple Syrup", quantity: "3/4", unit: .oz)
     ],
     directions: [
         Direction(description: "Combine all ingredients in a shaker with ice.", isOptional: false),
@@ -946,9 +947,9 @@ extension Recipe {
                                             description: "A highball cocktail made with dark rum and ginger beer.",
                                             category: .rum),
     ingredients: [
-        Ingredient(name: "Dark Rum", quantity: 2.0, unit: .oz),
-        Ingredient(name: "Ginger Beer", quantity: 4.0, unit: .oz),
-        Ingredient(name: "Lime Wedge (for garnish)", quantity: 1, unit: .none)
+        Ingredient(name: "Dark Rum", quantity: "2", unit: .oz),
+        Ingredient(name: "Ginger Beer", quantity: "", unit: .none),
+        Ingredient(name: "Lime Wedge (garnish)", quantity: "", unit: .none)
     ],
     directions: [
         Direction(description: "Fill glass with ice.", isOptional: false),
@@ -961,11 +962,11 @@ extension Recipe {
                                             description: "A sophisticated cocktail with a mix of rum and vermouth.",
                                             category: .rum),
     ingredients: [
-        Ingredient(name: "White Rum", quantity: 1.5, unit: .oz),
-        Ingredient(name: "Dry Vermouth", quantity: 0.75, unit: .oz),
-        Ingredient(name: "Orange Curaçao", quantity: 0.25, unit: .oz),
-        Ingredient(name: "Blackberry Liqueur", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Grenadine Syrup", quantity: 0.25, unit: .oz)
+        Ingredient(name: "White Rum", quantity: "1 1/2", unit: .oz),
+        Ingredient(name: "Dry Vermouth", quantity: "3/4", unit: .oz),
+        Ingredient(name: "Orange Curaçao", quantity: "1/4", unit: .oz),
+        Ingredient(name: "Blackberry Liqueur", quantity: "1", unit: .oz),
+        Ingredient(name: "Grenadine Syrup", quantity: "1/4", unit: .oz)
     ],
     directions: [
         Direction(description: "Stir all ingredients with ice in a mixing glass", isOptional: false),
@@ -976,18 +977,18 @@ extension Recipe {
                                             description: "A tropical cocktail with a blend of fruity and nutty flavors.",
                                             category: .rum),
            ingredients: [
-            Ingredient(name: "Dark Rum", quantity: 2, unit: .oz),
-            Ingredient(name: "Orange Curaçao", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 1, unit: .oz),
-            Ingredient(name: "Orgeat Syrup", quantity: 0.5, unit: .oz),
-            Ingredient(name: "Simple Syrup", quantity: 0.25, unit: .oz),
-            Ingredient(name: "Pineapple", quantity: 1, unit: .none),
-            Ingredient(name: "Mint", quantity: 1, unit: .none),
-            Ingredient(name: "Lime", quantity: 1, unit: .none)
+            Ingredient(name: "Dark Rum", quantity: "2", unit: .oz),
+            Ingredient(name: "Orange Curaçao", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+            Ingredient(name: "Orgeat Syrup", quantity: "1/2", unit: .oz),
+            Ingredient(name: "Simple Syrup", quantity: "1/4", unit: .oz),
+            Ingredient(name: "Pineapple", quantity: "1", unit: .none),
+            Ingredient(name: "Mint", quantity: "1", unit: .none),
+            Ingredient(name: "Lime", quantity: "1", unit: .none)
            ],
            directions:  [
             Direction(description: "Shake all ingredients with ice.", isOptional: false),
-            Direction(description: "Strain into a rocks glass.", isOptional: false),
+            Direction(description: "Strain into a chilled glass.", isOptional: false),
             Direction(description: " Garnish with pineapple, mint, and lime twist", isOptional: true)
            ]
     ),
@@ -995,11 +996,11 @@ extension Recipe {
                                            description: "A refreshing cocktail with mint, lime, and a hint of sweetness.",
                                             category: .rum),
     ingredients: [
-        Ingredient(name: "Rum", quantity: 2.0, unit: .oz),
-        Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Sugar", quantity: 2.0, unit: .tsp),
-        Ingredient(name: "Fresh Mint Leaves", quantity: 6.0, unit: .none),
-        Ingredient(name: "Soda Water", quantity: 0.0, unit: .none)
+        Ingredient(name: "Rum", quantity: "2", unit: .oz),
+        Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Sugar", quantity: "2", unit: .tsp),
+        Ingredient(name: "Fresh Mint Leaves", quantity: "6-8", unit: .none),
+        Ingredient(name: "Soda Water", quantity: "", unit: .none)
     ],
     directions: [
         Direction(description: "Muddle mint leaves and sugar in a glass.", isOptional: false),
@@ -1011,11 +1012,11 @@ extension Recipe {
                                             description: "A tropical delight blending creamy coconut and pineapple flavors.",
                                             category: .rum),
            ingredients: [
-            Ingredient(name: "Light Rum", quantity: 1.67, unit: .oz),
-            Ingredient(name: "Pineapple Juice", quantity: 1.67, unit: .oz),
-            Ingredient(name: "Cream of Coconut", quantity: 1, unit: .oz),
-            Ingredient(name: "Pineapple", quantity: 1, unit: .none),
-            Ingredient(name: "Cherry", quantity: 1, unit: .none)
+            Ingredient(name: "Light Rum", quantity: "1 2/3", unit: .oz),
+            Ingredient(name: "Pineapple Juice", quantity: "1 2/3", unit: .oz),
+            Ingredient(name: "Cream of Coconut", quantity: "1", unit: .oz),
+            Ingredient(name: "Pineapple", quantity:"", unit: .none),
+            Ingredient(name: "Cherry", quantity: "", unit: .none)
            ],
            directions:  [
             Direction(description: "Mix with crushed ice in a blender until smooth.", isOptional: false),
@@ -1027,12 +1028,12 @@ extension Recipe {
                                             description: "A fruity and tropical concoction that's perfect for parties.",
                                             category: .rum),
     ingredients: [
-        Ingredient(name: "White Rum", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Dark Rum", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Orange Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Pineapple Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Lime Juice", quantity: 0.5, unit: .oz),
-        Ingredient(name: "Grenadine Syrup", quantity: 0.25, unit: .oz)
+        Ingredient(name: "White Rum", quantity: "1", unit: .oz),
+        Ingredient(name: "Dark Rum", quantity: "1", unit: .oz),
+        Ingredient(name: "Orange Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Pineapple Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Lime Juice", quantity: "1/2", unit: .oz),
+        Ingredient(name: "Grenadine Syrup", quantity: "1/4", unit: .oz)
     ],
     directions: [
         Direction(description: "In a shaker with ice, combine all ingredients", isOptional: false),
@@ -1044,13 +1045,13 @@ extension Recipe {
                                             description: "A berry-flavored tropical drink.",
                                             category: .rum),
     ingredients: [
-        Ingredient(name: "White Rum", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Dark Rum", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Banana Liqueur", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Blackberry Liqueur", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Pineapple Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "A splash of Grenadine Syrup", quantity: 0.0, unit: .oz)
+        Ingredient(name: "White Rum", quantity: "1", unit: .oz),
+        Ingredient(name: "Dark Rum", quantity: "1", unit: .oz),
+        Ingredient(name: "Banana Liqueur", quantity: "1", unit: .oz),
+        Ingredient(name: "Blackberry Liqueur", quantity: "1", unit: .oz),
+        Ingredient(name: "Pineapple Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "A splash of Grenadine Syrup", quantity: "", unit: .none)
     ],
     directions: [
         Direction(description: "Combine all ingredients in a blender with ice", isOptional: false),
@@ -1062,14 +1063,14 @@ extension Recipe {
                                             description: "A potent mix of various rums and tropical juices.",
                                             category: .rum),
     ingredients: [
-        Ingredient(name: "White Rum", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Golden Rum", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Dark Rum", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Apricot Brandy", quantity: 0.5, unit: .oz),
-        Ingredient(name: "Pineapple Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Orange Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Lime Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "A splash of Grenadine Syrup", quantity: 1.0, unit: .tsp)
+        Ingredient(name: "White Rum", quantity: "1", unit: .oz),
+        Ingredient(name: "Golden Rum", quantity: "1", unit: .oz),
+        Ingredient(name: "Dark Rum", quantity: "1", unit: .oz),
+        Ingredient(name: "Apricot Brandy", quantity: "1/2", unit: .oz),
+        Ingredient(name: "Pineapple Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Orange Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Lime Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "A splash of Grenadine Syrup", quantity: "", unit: .none)
     ],
     directions: [
         Direction(description: "Combine all ingredients in a shaker with ice", isOptional: false),
@@ -1083,14 +1084,14 @@ extension Recipe {
                                             description: "A refreshing Italian cocktail, perfect for summer afternoons.",
                                             category: .champagne),
     ingredients: [
-        Ingredient(name: "Aperol", quantity: 2.0, unit: .oz),
-        Ingredient(name: "Champagne or Prosecco", quantity: 3.0, unit: .oz),
-        Ingredient(name: "Soda Water", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Orange Slice", quantity: 1.0, unit: .none)
+        Ingredient(name: "Aperol", quantity: "2", unit: .oz),
+        Ingredient(name: "Champagne or Prosecco", quantity: "", unit: .none),
+        Ingredient(name: "Soda Water", quantity: "1", unit: .oz),
+        Ingredient(name: "Orange Slice", quantity: "", unit: .none)
     ],
     directions: [
         Direction(description: "Fill glass with ice", isOptional: false),
-        Direction(description: "Add Aperol, champagne, and soda water", isOptional: false),
+        Direction(description: "Add Aperol, Champagne, and Soda Water", isOptional: false),
         Direction(description: "Stir gently", isOptional: false),
         Direction(description: " Garnish with orange slice", isOptional: true)
     ]
@@ -1099,8 +1100,8 @@ extension Recipe {
                                             description: "A peachy and bubbly delight.",
                                             category: .champagne),
     ingredients: [
-        Ingredient(name: "Peach purée", quantity: 2.0, unit: .oz),
-        Ingredient(name: "Champagne or Sparkling wine", quantity: 3.0, unit: .oz),
+        Ingredient(name: "Peach purée", quantity: "2", unit: .oz),
+        Ingredient(name: "Champagne or Sparkling wine", quantity: "", unit: .none),
     ],
     directions: [
         Direction(description: "Pour peach purée into a champagne flute", isOptional: false),
@@ -1111,9 +1112,9 @@ extension Recipe {
                                             description: "A bubbly cocktail that combines tequila with sparkling wine.",
                                             category: .champagne),
            ingredients: [
-            Ingredient(name: "Champagne or Sparkling Wine", quantity: 4.0, unit: .oz),
-            Ingredient(name: "Tequila", quantity: 1.0, unit: .oz),
-            Ingredient(name: "Lime Juice", quantity: 0.5, unit: .oz),
+            Ingredient(name: "Champagne or Sparkling Wine", quantity: "", unit: .none),
+            Ingredient(name: "Tequila", quantity: "1", unit: .oz),
+            Ingredient(name: "Lime Juice", quantity: "1/2", unit: .oz),
         
            ],
            directions:  [
@@ -1125,10 +1126,10 @@ extension Recipe {
                                             description: "A fizzy cocktail with a mix of gin, lemon, and champagne.",
                                             category: .champagne),
     ingredients: [
-        Ingredient(name: "Gin", quantity: 2.0, unit: .oz),
-        Ingredient(name: "Fresh Lemon Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Champagne or Sparkling wine", quantity: 3.0, unit: .oz),
-        Ingredient(name: "Lemon Twist", quantity: 1.0, unit: .none)
+        Ingredient(name: "Gin", quantity: "2", unit: .oz),
+        Ingredient(name: "Fresh Lemon Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Champagne or Sparkling wine", quantity: "", unit: .none),
+        Ingredient(name: "Lemon Twist", quantity: "", unit: .none)
     ],
     directions: [
         Direction(description: "Combine gin, lemon juice, and simple syrup in a shaker with ice", isOptional: false),
@@ -1142,8 +1143,8 @@ extension Recipe {
                                             description: "A cocktail with a touch of fruity sweetness.",
                                             category: .champagne),
     ingredients: [
-        Ingredient(name: "Crème de cassis (blackcurrant liqueur)", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Champagne or Sparkling wine", quantity: 3.0, unit: .oz),
+        Ingredient(name: "Crème de cassis (blackcurrant liqueur)", quantity: "1", unit: .oz),
+        Ingredient(name: "Champagne or Sparkling wine", quantity: "", unit: .none),
     ],
     directions: [
         Direction(description: "Pour crème de cassis into a champagne flute", isOptional: false),
@@ -1154,8 +1155,8 @@ extension Recipe {
                                             description: "A brunch classic combining the effervescence of champagne with the sweetness of orange juice.",
                                             category: .champagne),
     ingredients: [
-        Ingredient(name: "Champagne or Sparkling wine", quantity: 3.0, unit: .oz),
-        Ingredient(name: "Orange Juice", quantity: 2.0, unit: .none),
+        Ingredient(name: "Champagne or Sparkling wine", quantity: "", unit: .none),
+        Ingredient(name: "Orange Juice", quantity: "", unit: .none),
     ],
     directions: [
         Direction(description: "Fill half a flute with champagne", isOptional: false),
@@ -1166,9 +1167,9 @@ extension Recipe {
                                             description: "A festive cocktail with a combination of cranberry and orange flavors.",
                                             category: .champagne),
     ingredients: [
-        Ingredient(name: "Champagne or Sparkling wine", quantity: 3.0, unit: .oz),
-        Ingredient(name: "Cranberry Juice", quantity: 1.0, unit: .oz),
-        Ingredient(name: "Triple Sec", quantity: 0.5, unit: .oz)
+        Ingredient(name: "Champagne or Sparkling wine", quantity: "", unit: .none),
+        Ingredient(name: "Cranberry Juice", quantity: "1", unit: .oz),
+        Ingredient(name: "Triple Sec", quantity: "1/2", unit: .oz)
     ],
     directions: [
         Direction(description: "Pour cranberry juice and triple sec into a champagne flute", isOptional: false),

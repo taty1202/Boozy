@@ -26,13 +26,13 @@ struct ModifyIngredientView: ModifyComponentView {
         Form {
             TextField("Ingredient Name", text: $ingredient.name)
                 .listRowBackground(listBackgroundColor)
-            Stepper(value: $ingredient.quantity, in: 0...100, step: 0.5) {
+//            Stepper(value: $ingredient.quantity, in: 0...100, step: 0.5) {
                 HStack {
+                    TextField("Quantity", text: $ingredient.quantity)
                     Text("Quantity:")
-                    TextField("Quantity", value: $ingredient.quantity, formatter: NumberFormatter.decimal)
-                        .keyboardType(.numbersAndPunctuation)
+                        .listRowBackground(listBackgroundColor)
                 }
-            }.listRowBackground(listBackgroundColor)
+//            }
             Picker(selection: $ingredient.unit, label: HStack {
                 Text("Unit")
                 Spacer()
@@ -57,13 +57,6 @@ struct ModifyIngredientView: ModifyComponentView {
     }
 }
 
-extension NumberFormatter {
-    static var decimal: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter
-    }
-}
 
 struct ModifyIngredientView_Previews: PreviewProvider {
     @State static var recipe = Recipe.testRecipes[0]
